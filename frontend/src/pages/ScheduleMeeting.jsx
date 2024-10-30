@@ -13,12 +13,15 @@ function ScheduleMeeting() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Convert startTime to ISO format
+      const startTimeISO = new Date(startTime).toISOString();
+
       await axios.post("/api/schedule", {
         hostID: userID,
         meetingCode,
-        startTime: startTimeISO,
+        startTime: startTimeISO, // Use startTimeISO in the request
       });
- // Include meetingCode in the request
+
       alert("Meeting scheduled successfully");
       // Reset the form fields after scheduling
       setMeetingCode("");
