@@ -13,11 +13,12 @@ function ScheduleMeeting() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/schedule-meeting", {
+      await axios.post("/api/schedule", {
         hostID: userID,
         meetingCode,
-        startTime,
-      }); // Include meetingCode in the request
+        startTime: startTimeISO,
+      });
+ // Include meetingCode in the request
       alert("Meeting scheduled successfully");
       // Reset the form fields after scheduling
       setMeetingCode("");
