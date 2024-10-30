@@ -11,7 +11,13 @@ const app = express();
 const server = createServer(app);
 const io = connectToSocket(server);
 
+
 app.set("port", process.env.PORT || 8000);
+app.use(cors({
+  origin: 'https://deploy1-1-vlc1.onrender.com', // Allow this origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+  credentials: true, // Allow credentials (if needed)
+}));
 app.use(cors());
 app.use(express.json({ limit: "40kb" }));
 app.use(express.urlencoded({ limit: "40kb", extended: true }));
