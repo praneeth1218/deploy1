@@ -5,40 +5,32 @@ import mongoose from "mongoose";
 import { connectToSocket } from "./controllers/socketManager.js";
 import cors from "cors";
 import userRoutes from "./routes/users.routes.js";
+import "./scheduler.js"; // Import the scheduler to start the cron job
 
 const app = express();
 const server = createServer(app);
 const io = connectToSocket(server);
 
 app.set("port", process.env.PORT || 8000);
-
-const corsOptions = {
-   origin: 'https://deploy1-1-al14.onrender.com', 
-   methods: 'GET, POST, PUT, DELETE',
-   allowedHeaders: 'Content-Type, Authorization',
-   credentials: true
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
-
+app.use(cors());
 app.use(express.json({ limit: "40kb" }));
 app.use(express.urlencoded({ limit: "40kb", extended: true }));
-app.use("/api/v1/users", userRoutes); 
+
+app.use("/api/v1/users", userRoutes);
 
 const start = async () => {
-   try {
-      const connectionDb = await mongoose.connect(
-         "mongodb+srv://praneethapkr1218:iompProject@cluster0.dakiq.mongodb.net/"
-      );
-      console.log(`MONGO Connected DB Host: ${connectionDb.connection.host}`);
-      
-      server.listen(app.get("port"), () => {
-         console.log(`Listening on port ${app.get("port")}`);
-      });
-   } catch (error) {
-      console.error("Error connecting to the database:", error);
-   }
+  try {
+    const connectionDb = await mongoose.connect(
+      "mongodb+srv://praneethapkr1218:iompProject@cluster0.dakiq.mongodb.net/"
+    );
+    console.log(`MONGO Connected DB Host: ${connectionDb.connection.host}`);
+
+    server.listen(app.get("port"), () => {
+      console.log("LISTENING ON PORT", app.get("port"));
+    });
+  } catch (error) {
+    console.error("Failed to connect to MongoDB", error);
+  }
 };
 
 start();
