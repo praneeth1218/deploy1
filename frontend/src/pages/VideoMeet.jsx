@@ -66,7 +66,7 @@ export default function VideoMeetComponent() {
       // Fetch meeting details when the component mounts
       const fetchMeeting = async () => {
         try {
-          const response = await axios.get(`/api/meeting/${meetingID}`);
+          const response = await axios.get(/api/meeting/${meetingID});
           setMeeting(response.data.meeting);
         } catch (error) {
           console.error("Error fetching meeting", error);
@@ -406,14 +406,22 @@ useEffect(() => {
         return Object.assign(stream.getVideoTracks()[0], { enabled: false })
     }
 
-    let handleVideo = () => {
-        setVideo(!video);
-        // getUserMedia();
-    }
+   let handleVideo = () => {
+     if (hasMeetingStarted()) {
+       setVideo(!video);
+       // getUserMedia();
+     } else {
+       alert("Meeting has not started yet.");
+     }
+   };
     let handleAudio = () => {
-        setAudio(!audio)
+      if (hasMeetingStarted()) {
+        setAudio(!audio);
         // getUserMedia();
-    }
+      } else {
+        alert("Meeting has not started yet.");
+      }
+    };
 
     useEffect(() => {
         if (screen !== undefined) {
