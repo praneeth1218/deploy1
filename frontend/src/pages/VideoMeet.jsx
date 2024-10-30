@@ -66,7 +66,7 @@ export default function VideoMeetComponent() {
       // Fetch meeting details when the component mounts
       const fetchMeeting = async () => {
         try {
-          const response = await axios.get(/api/meeting/${meetingID});
+          const response = await axios.get(`/api/meeting/${meetingID}`);
           setMeeting(response.data.meeting);
         } catch (error) {
           console.error("Error fetching meeting", error);
