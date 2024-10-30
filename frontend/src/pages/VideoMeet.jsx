@@ -80,11 +80,6 @@ export default function VideoMeetComponent() {
 
 
 useEffect(() => {
-  // Function to check if the meeting has started
-  const hasMeetingStarted = () => {
-    return meeting?.status === "started"; // Adjust based on your meeting object structure
-  };
-
   // Call getPermissions only if the meeting has started
   if (hasMeetingStarted()) {
     console.log("Meeting has started. Getting permissions...");
@@ -93,6 +88,7 @@ useEffect(() => {
     console.log("Meeting has not started yet.");
   }
 }, [meeting]); 
+
 
     let getDislayMedia = () => {
         if (screen) {
@@ -305,7 +301,7 @@ useEffect(() => {
         socketRef.current.on('connect', () => {
             socketRef.current.emit('join-call', window.location.href)
             socketIdRef.current = socketRef.current.id
-
+            getMedia();
             socketRef.current.on('chat-message', addMessage)
 
             socketRef.current.on('user-left', (id) => {
@@ -409,19 +405,21 @@ useEffect(() => {
    let handleVideo = () => {
      if (hasMeetingStarted()) {
        setVideo(!video);
-       // getUserMedia();
+       getUserMedia(); // Call getUserMedia after setting state
      } else {
        alert("Meeting has not started yet.");
      }
    };
-    let handleAudio = () => {
-      if (hasMeetingStarted()) {
-        setAudio(!audio);
-        // getUserMedia();
-      } else {
-        alert("Meeting has not started yet.");
-      }
-    };
+
+   let handleAudio = () => {
+     if (hasMeetingStarted()) {
+       setAudio(!audio);
+       getUserMedia(); // Call getUserMedia after setting state
+     } else {
+       alert("Meeting has not started yet.");
+     }
+   };
+
 
     useEffect(() => {
         if (screen !== undefined) {
