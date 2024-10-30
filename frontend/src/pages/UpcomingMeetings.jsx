@@ -10,7 +10,7 @@ function UpcomingMeetings() {
   useEffect(() => {
     const fetchMeetings = async () => {
       try {
-        const response = await axios.get(`/api/upcoming-meetings/${userID}`);
+        const response = await axios.get(`/api/scheduled-meetings/${userID}`);
         setMeetings(response.data.meetings);
       } catch (error) {
         console.error("Error fetching meetings", error);
@@ -24,12 +24,20 @@ function UpcomingMeetings() {
       <h3>Upcoming Meetings</h3>
       <ul>
         {meetings.length > 0 ? (
-          meetings.map((meeting) => (
-            <li key={meeting.meetingID}>
-              Meeting Code: {meeting.meetingCode}, Start Time:{" "}
-              {new Date(meeting.startTime).toLocaleString()}
-            </li>
-          ))
+          meetings.map((meeting) => {
+            // Check if meeting.startTime is valid before creating a new Date object
+            const startTime = new Date(meeting.startTime);
+            const formattedTime =
+              startTime instanceof Date && !isNaN(startTime)
+                ? startTime.toLocaleString()
+                : "Invalid Date";
+
+            return (
+              <li key={meeting.meetingID}>
+                Meeting Code: {meeting.meetingCode}, Start Time: {formattedTime}
+              </li>
+            );
+          })
         ) : (
           <li>No upcoming meetings scheduled.</li>
         )}
