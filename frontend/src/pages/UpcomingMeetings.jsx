@@ -10,7 +10,7 @@ function UpcomingMeetings() {
   useEffect(() => {
     const fetchMeetings = async () => {
       try {
-        const response = await axios.get(/api/upcoming-meetings/${userID});
+        const response = await axios.get(`/api/upcoming-meetings/${userID}`);
         setMeetings(response.data.meetings);
       } catch (error) {
         console.error("Error fetching meetings", error);
